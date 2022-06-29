@@ -68,19 +68,7 @@ class CoreModel(QThread):
         dataTuple = linkedListObject.finder()
         for i in dataTuple:
             # i will be a tuple
-            # print(i)
             self.newValue.emit(i)
 
 
 linkedListObject = CircularDoublyLinkedList()
-# linkedListObject.append(1)
-# linkedListObject.append(2)
-# linkedListObject.append(3)
-# linkedListObject.append(4)
-# linkedListObject.append(5)
-# linkedListObject.append(6)
-# linkedListObject.append(7)
-# linkedListObject.append(8)
-
-# c = CoreModel()
-# c.start()
