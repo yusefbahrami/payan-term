@@ -4,7 +4,7 @@ from PyQt5.QtCore import QThread
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, coreObject: QThread) -> None:
+    def __init__(self, coreObject, modelObject) -> None:
         super().__init__()
 
         font = QFont("Vazir", 14)
@@ -14,15 +14,17 @@ class MainWindow(QMainWindow):
 
         self.setMinimumSize(500, 300)
 
-        widget = CentralWidget(coreObject)
+        widget = CentralWidget(coreObject, modelObject)
         self.setCentralWidget(widget)
 
-        self.show()
+        # self.show()
 
 
 class CentralWidget(QWidget):
-    def __init__(self, coreObject) -> None:
+    def __init__(self, coreObject: QThread, modelObject) -> None:
         super().__init__()
+        self.coreObj = coreObject
+        self.modelObj = modelObject
 
         layout = QGridLayout()
         self.setLayout(layout)
@@ -33,6 +35,7 @@ class CentralWidget(QWidget):
         layout.addWidget(self.txtdisplay, 0, 0, 1, 4)
 
         self.btnAdd = QPushButton(text="Add", parent=self)
+        self.btnAdd.clicked.connect(self.btnAdd_click)
         layout.addWidget(self.btnAdd, 0, 4)
 
         self.lblDisplay = QLabel()
@@ -76,7 +79,9 @@ class CentralWidget(QWidget):
 
         try:
             with open('Datafile.dll', 'r') as file:
-                pass
+                for line in file:
+                    print(f"{line} aaaa")  # test
+                    self.displayLabel_setText(line.strip())
         except FileNotFoundError:
             self.show_messagebox()
 
@@ -101,9 +106,27 @@ class CentralWidget(QWidget):
         else:
             self.btnRoll.setEnabled(True)
 
+    def displayLabel_setText(self, text):
+        if self.lblDisplay.text() == "":
+            self.lblDisplay.setText(text)
+            self.modelObj.append(text)
+        else:
+            self.lblDisplay.setText(f"{self.lblDisplay.text()}, {text}")
+            self.modelObj.append(text)
 
-app = QApplication([])
-with open("Datafile.dll", 'a'):
-    pass
-win = MainWindow("")
-app.exec()
+    def btnAdd_click(self):
+        self.displayLabel_setText(self.txtdisplay.text())
+        self.txtdisplay.setFocus()
+
+        with open('dataFile.txt', 'a') as file:
+            file.write(f"{self.txtdisplay.text()}\n")
+
+        self.txtdisplay.clear()
+        self.check_enable()
+
+
+# app = QApplication([])
+# with open("Datafile.dll", 'a'):
+#     pass
+# win = MainWindow("")
+# app.exec()
