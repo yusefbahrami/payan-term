@@ -75,12 +75,12 @@ class CentralWidget(QWidget):
         layout.addWidget(self.progressbar, 4, 0, 1, 4)
 
         self.btnRoll = QPushButton(text="Roll", parent=self)
+        self.btnRoll.clicked.connect(self.btnRoll_click)
         layout.addWidget(self.btnRoll, 4, 4)
 
         try:
             with open('Datafile.dll', 'r') as file:
                 for line in file:
-                    print(f"{line} aaaa")  # test
                     self.displayLabel_setText(line.strip())
         except FileNotFoundError:
             self.show_messagebox()
@@ -118,15 +118,22 @@ class CentralWidget(QWidget):
         self.displayLabel_setText(self.txtdisplay.text())
         self.txtdisplay.setFocus()
 
-        with open('dataFile.txt', 'a') as file:
+        with open('Datafile.dll', 'a') as file:
             file.write(f"{self.txtdisplay.text()}\n")
 
         self.txtdisplay.clear()
         self.check_enable()
 
+    def btnRoll_click(self):
+        self.coreObj.start()
+        self.coreObj.newValue.connect(self.set_data)
 
-# app = QApplication([])
-# with open("Datafile.dll", 'a'):
-#     pass
-# win = MainWindow("")
-# app.exec()
+    def set_data(self, data):
+        self.lblShowInit.setText(data[0])
+        self.lblShowFront.setText(data[1])
+        self.progressbar.setMaximum(data[2])
+        self.progressbar.setValue(data[3]+1)
+        self.lblShowInitPrev.setText(data[5])
+        self.lblShowInitNext.setText(data[4])
+        self.lblShowFrontPrev.setText(data[7])
+        self.lblShowFrontNext.setText(data[6])
