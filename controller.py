@@ -1,10 +1,9 @@
 from view import MainWindow
-from model import CoreModel, CircularDoublyLinkedList
+from model import CoreModel, linkedListObject
 from PyQt5.QtWidgets import QApplication
 
 app = QApplication([])
 core = CoreModel()
-dataModel = CircularDoublyLinkedList()
-win = MainWindow(core, dataModel)
+win = MainWindow(core, linkedListObject)
 win.show()
 app.exec()
