@@ -76,14 +76,16 @@ class CentralWidget(QWidget):
         self.btnRoll.clicked.connect(self.btnRoll_click)
         layout.addWidget(self.btnRoll, 4, 4)
 
+        self.initialize_data()
+        self.check_enable()
+
+    def initialize_data(self):
         try:
             with open('Datafile.dll', 'r') as file:
                 for line in file:
                     self.displayLabel_setText(line.strip())
         except FileNotFoundError:
             self.show_messagebox()
-
-        self.check_enable()
 
     def show_messagebox(self):
         self.msgBox = QMessageBox()
