@@ -17,8 +17,6 @@ class MainWindow(QMainWindow):
         widget = CentralWidget(coreObject, modelObject)
         self.setCentralWidget(widget)
 
-        # self.show()
-
 
 class CentralWidget(QWidget):
     def __init__(self, coreObject: QThread, modelObject) -> None:
